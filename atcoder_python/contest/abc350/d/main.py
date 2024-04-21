@@ -1,26 +1,34 @@
-from collections import defaultdict
+def dfs(v, G, visited):
+    stack = [v]
+    count = 0
+    while stack:
+        node = stack.pop()
+        if visited[node]:
+            continue
+        visited[node] = True
+        count += 1
+        for next_node in G[node]:
+            if not visited[next_node]:
+                stack.append(next_node)
+    return count
 
 N, M = map(int, input().split())
 if M == 0:
   print(0)
   exit()
-friends = defaultdict(set)
-
+G = [[] for _ in range(N)]
 for _ in range(M):
     A, B = map(int, input().split())
-    friends[A].add(B)
-    friends[B].add(A)
+    G[A-1].append(B-1)
+    G[B-1].append(A-1)
 
-ans = 0
-for i in range(1, N+1):
-    potential_friends = set()
-    for friend in friends[i]:
-        potential_friends |= friends[friend]
-    potential_friends -= friends[i]
-    potential_friends.discard(i)
-    for friend in potential_friends:
-        friends[i].add(friend)
-        friends[friend].add(i)
-    ans += len(potential_friends)
+visited = [False] * N
+allEdges = 0
 
-print(ans)
+for v in range(N):
+    if visited[v]:
+        continue
+    num_connected_nodes = dfs(v, G, visited)
+    allEdges += num_connected_nodes * (num_connected_nodes - 1) // 2
+
+print(allEdges - M)
