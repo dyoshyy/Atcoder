@@ -3,6 +3,7 @@ D = list(map(int, input().split()))
 weekDays = A + B
 D = [(d % weekDays) for d in D]
 D.sort()
+D.append(D[0])
 
 # print(D)
 # if max(D) - min(D) > A:
@@ -22,11 +23,13 @@ D.sort()
 #     exit()
   
 # print("No")
-
-for d in range(weekDays):
-  if (0 < (d + D[0]) % weekDays) and ((d + D[0]) % weekDays <= A ) and (0 < (d + D[-1]) % weekDays) and ((d + D[-1]) % weekDays <= A):
-      print("Yes")
-      exit()
+# print("D:", D)
+for i in range(len(D)-1):
+  val = (D[i+1]-D[i]) % weekDays
+  # print(i, val)
+  if val > B:
+    print("Yes")
+    exit()
   
 print("No")
   
